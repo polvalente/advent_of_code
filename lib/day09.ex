@@ -59,7 +59,7 @@ defmodule Day9 do
   end
 
   def part2(input) do
-    {full_data, total_size} =
+    {full_data, _total_size} =
       input
       |> parse()
       |> Enum.with_index(fn size, id ->

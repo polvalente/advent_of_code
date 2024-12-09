@@ -21,7 +21,8 @@ defmodule AdventOfCode2024.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:nx, "~> 0.9"}
+      {:nx, "~> 0.9"},
+      {:zigler, "~> 0.13.3", runtime: false}
     ]
   end
 end
