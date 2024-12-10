@@ -21,7 +21,30 @@ defmodule Day10 do
     end)
   end
 
+  # 778
   def part1(input) do
+    {graph, starts, ends} = common(input)
+
+    for {start, _} <- starts, {target, _} <- ends, reduce: 0 do
+      acc ->
+        if :digraph.get_path(graph, start, target) do
+          acc + 1
+        else
+          acc
+        end
+    end
+  end
+
+  # 1925
+  def part2(input) do
+    {graph, starts, ends} = common(input)
+
+    for {start, _} <- starts, {target, _} <- ends, reduce: 0 do
+      acc -> acc + count_paths(graph, start, target, MapSet.new())
+    end
+  end
+
+  defp common(input) do
     data = parse(input)
 
     nodes_by_index =
@@ -44,7 +67,14 @@ defmodule Day10 do
     end)
 
     Enum.each(nodes_by_index, fn {coord, value} ->
-      neighbors = get_neighbors(coord, nodes_by_index, num_rows, num_cols, [{1, 0}, {-1, 0}, {0, 1}, {0, -1}])
+      neighbors =
+        get_neighbors(coord, nodes_by_index, num_rows, num_cols, [
+          {1, 0},
+          {-1, 0},
+          {0, 1},
+          {0, -1}
+        ])
+
       for {neighbor_coord, neighbor_value} <- neighbors, neighbor_value - value == 1 do
         :digraph.add_edge(graph, coord, neighbor_coord)
       end
@@ -53,14 +83,7 @@ defmodule Day10 do
     starts = Enum.filter(nodes_by_index, fn {_, value} -> value == 0 end)
     ends = Enum.filter(nodes_by_index, fn {_, value} -> value == 9 end)
 
-    # starts = [{{0, 2}, 0}]
-
-    for {start, _} <- starts, reduce: 0 do
-      acc ->
-        acc + Enum.count(ends, fn {target, _} ->
-          :digraph.get_short_path(graph, start, target)
-        end)
-    end
+    {graph, starts, ends}
   end
 
   defp get_neighbors({x, y}, nodes, num_rows, num_cols, offsets) do
@@ -74,5 +97,23 @@ defmodule Day10 do
         []
       end
     end)
+  end
+
+  defp count_paths(graph, current, target, visited) do
+    cond do
+      current == target ->
+        1
+
+      current in visited ->
+        0
+
+      true ->
+        next_vertices = :digraph.out_neighbours(graph, current)
+        visited = MapSet.put(visited, current)
+
+        Enum.reduce(next_vertices, 0, fn vertex, acc ->
+          acc + count_paths(graph, vertex, target, visited)
+        end)
+    end
   end
 end
