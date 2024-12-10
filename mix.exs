@@ -7,7 +7,8 @@ defmodule AdventOfCode2024.MixProject do
       version: "0.1.0",
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      elixirc_paths: ["lib", "test/support"]
     ]
   end
 
@@ -22,7 +23,8 @@ defmodule AdventOfCode2024.MixProject do
   defp deps do
     [
       {:nx, "~> 0.9"},
-      {:zigler, "~> 0.13.3", runtime: false}
+      # {:zigler, "~> 0.13.3", runtime: false}
+      {:zigler, path: "/home/valente/coding/zigler"}
     ]
   end
 end

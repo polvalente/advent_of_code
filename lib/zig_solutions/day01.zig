@@ -47,10 +47,10 @@ pub fn solve_part2(input: [][2]u64) u64 {
 
     for (left.items) |a| {
         var occurences: u64 = 0;
-        for (right.items) |b| {
-            if (a == b) {
+        for (right.items) |r| {
+            if (a == r) {
                 occurences += 1;
-            } else if (b > a) {
+            } else if (r > a) {
                 break;
             }
         }
