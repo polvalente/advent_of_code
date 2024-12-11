@@ -26,6 +26,10 @@ defmodule Day11 do
 
   iex> Day11.part1(Day11.input(), 25, true)
   239714
+
+  # This is part 2
+  iex> Day11.part1(Day11.input(), 75, true)
+  284973560658514
   """
   def part1(input, num_ticks, count?) do
     data = parse(input)
@@ -33,20 +37,18 @@ defmodule Day11 do
     stone_map =
       data |> Enum.group_by(& &1) |> Enum.map(fn {k, v} -> {k, length(v)} end) |> Map.new()
 
-    cache = %{}
+    cache = :ets.new(:cache, [:set, :protected])
 
-    {stone_map, _} =
-      Enum.reduce(1..num_ticks, {stone_map, cache}, fn _, {stone_map, cache} ->
-        Enum.reduce(stone_map, {%{}, cache}, fn {stone, count}, {next_map, cache} ->
-          {transformed, cache} = update_stone(stone, cache)
+    stone_map =
+      Enum.reduce(1..num_ticks, stone_map, fn _, stone_map ->
+        for {stone, count} <- stone_map, reduce: %{} do
+          next_map ->
+            transformed = update_stone(stone, cache)
 
-          next_map =
             Enum.reduce(transformed, next_map, fn new_stone, acc ->
               Map.update(acc, new_stone, count, &(&1 + count))
             end)
-
-          {next_map, cache}
-        end)
+        end
       end)
 
     if count? do
@@ -58,23 +60,27 @@ defmodule Day11 do
     end
   end
 
-  def update_stone(stone, cache) when is_map_key(cache, stone),
-    do: {Map.fetch!(cache, stone), cache}
-
   def update_stone(stone, cache) do
-    result =
-      cond do
-        stone == 0 ->
-          [1]
+    cached = :ets.lookup(cache, stone)
 
-        upd = replace_even_digits_by_two(stone) ->
-          upd
+    cond do
+      cached != [] ->
+        [{^stone, result}] = cached
+        result
 
-        true ->
-          [stone * 2024]
-      end
+      stone == 0 ->
+        :ets.insert(cache, {0, [1]})
+        [1]
 
-    {result, Map.put(cache, stone, result)}
+      upd = replace_even_digits_by_two(stone) ->
+        :ets.insert(cache, {stone, upd})
+        upd
+
+      true ->
+        res = [stone * 2024]
+        :ets.insert(cache, {stone, res})
+        res
+    end
   end
 
   def replace_even_digits_by_two(stone) do
