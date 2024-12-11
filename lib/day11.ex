@@ -7,9 +7,6 @@ defmodule Day11 do
 
   def parse(input) do
     input
-    |> split_lines()
-    |> List.flatten()
-    |> hd()
     |> String.split(" ")
     |> Enum.map(&String.to_integer/1)
   end
