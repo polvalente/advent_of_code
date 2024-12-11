@@ -7,7 +7,7 @@ defmodule Day11 do
 
   def parse(input) do
     input
-    |> String.split(" ")
+    |> String.split([" ", "\n"], trim: true)
     |> Enum.map(&String.to_integer/1)
   end
 
