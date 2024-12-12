@@ -23,8 +23,8 @@ defmodule AdventOfCode2024.MixProject do
   defp deps do
     [
       {:nx, "~> 0.9"},
-      # {:zigler, "~> 0.13.3", runtime: false}
-      {:zigler, path: "/home/valente/coding/zigler"}
+      {:zigler, "~> 0.13.3", runtime: false},
+      # {:zigler, path: "/home/valente/coding/zigler"}
     ]
   end
 end
