@@ -116,4 +116,53 @@ defmodule Day13 do
 
     {Polaris.Updates.apply_updates(n, scaled_updates), new_optimizer_state, loss}
   end
+
+  @doc """
+  iex> Day13.part2(Day13.test_input())
+  875318608908
+
+  iex> Day13.part2(Day13.input())
+  77204516023437
+  """
+  def part2(input) do
+    offset = 10000000000000
+    for %{a: a, b: b, prize: prize} <- parse(input), reduce: 0 do
+      cost ->
+
+      t =
+        Nx.u64([
+          [a.x, b.x],
+          [a.y, b.y]
+        ])
+
+      p = Nx.u64([[prize.x + offset], [prize.y + offset]])
+
+      # nb via Cramer's rule
+      nb =
+        Nx.quotient(
+          integer_det(Nx.put_slice(t, [0, 1], p)),
+          integer_det(t)
+        )
+        |> Nx.to_number()
+
+      # na via substitution in the first equation
+      na = div(prize.x + offset - nb * b.x, a.x)
+
+      actual_p = Nx.dot(t, Nx.u64([[na], [nb]]))
+
+      if  actual_p == p do
+        cost + 3 * na + nb
+      else
+        cost
+      end
+    end
+  end
+
+  defn integer_det(t) do
+    t = t |> Nx.tile([1, 2])
+    main_diag = Nx.take_diagonal(t)
+    sub_diag = Nx.take_diagonal(t, offset: 1)
+
+    Nx.product(main_diag) - Nx.product(sub_diag)
+  end
 end
