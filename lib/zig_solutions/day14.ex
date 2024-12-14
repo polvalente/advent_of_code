@@ -32,7 +32,7 @@ defmodule Zig.Day14 do
   end
 
   @doc """
-  iex> Day14.part2(Day14.input(), 101, 103, false)
+  iex> Zig.Day14.part2(Zig.Day14.input(), 101, 103)
   7520
   """
   def part2(input, width, height) do
