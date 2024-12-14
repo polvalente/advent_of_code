@@ -36,19 +36,7 @@ defmodule Day14 do
   222062148
   """
   def part1(input, max_x, max_y) do
-    robots =
-      for {px0, py0, vx0, vy0} <- parse(input), reduce: %{} do
-        acc ->
-          p = fn s0, v, t -> s0 + v * t end
-
-          px = p.(px0, vx0, 100)
-          py = p.(py0, vy0, 100)
-
-          px = rem(rem(px, max_x) + max_x, max_x)
-          py = rem(rem(py, max_y) + max_y, max_y)
-
-          Map.update(acc, {px, py}, 1, fn count -> count + 1 end)
-      end
+    robots = calculate_robots(input, 100, max_x, max_y)
 
     x2 = div(max_x, 2) - 1
     y2 = div(max_y, 2) - 1
@@ -75,6 +63,47 @@ defmodule Day14 do
               acc
             end
           end)
+    end
+  end
+
+  @doc """
+  iex> Day14.part2(Day14.input(), 101, 103, false)
+  7520
+  """
+  def part2(input, width, height, print? \\ true) do
+    empty_grid = List.duplicate(List.duplicate(".", width) ++ ["\n"], height)
+
+    for t <- 0..100_000 do
+      robots = calculate_robots(input, t, width, height)
+
+      if Enum.all?(robots, fn {_, count} -> count == 1 end) do
+        if print? do
+          for {{x, y}, _} <- robots, reduce: empty_grid do
+            grid ->
+              List.update_at(grid, y, fn row -> List.update_at(row, x, fn _ -> "1" end) end)
+          end
+          |> IO.puts()
+        end
+
+        throw({:found, t})
+      end
+    end
+  catch
+    {:found, t} -> t
+  end
+
+  defp calculate_robots(input, t, max_x, max_y) do
+    for {px0, py0, vx0, vy0} <- parse(input), reduce: %{} do
+      acc ->
+        p = fn s0, v, t -> s0 + v * t end
+
+        px = p.(px0, vx0, t)
+        py = p.(py0, vy0, t)
+
+        px = rem(rem(px, max_x) + max_x, max_x)
+        py = rem(rem(py, max_y) + max_y, max_y)
+
+        Map.update(acc, {px, py}, 1, fn count -> count + 1 end)
     end
   end
 end
