@@ -28,14 +28,13 @@ defmodule Day12 do
 
     data =
       data
-    |> Enum.with_index(fn row, i ->
-      Enum.with_index(row, fn char, j ->
-        {{i, j}, char}
+      |> Enum.with_index(fn row, i ->
+        Enum.with_index(row, fn char, j ->
+          {{i, j}, char}
+        end)
       end)
-    end)
-    |> List.flatten()
-    |> Map.new()
-
+      |> List.flatten()
+      |> Map.new()
 
     graph = :digraph.new()
 
@@ -72,7 +71,6 @@ defmodule Day12 do
       price =
         Enum.reduce(region, 0, fn pos, acc ->
           Enum.reduce(get_neighbors(pos, num_rows, num_cols, false), acc, fn pos, acc ->
-
             if data[pos] == char do
               acc
             else
@@ -100,7 +98,7 @@ defmodule Day12 do
   862714
   """
   def part2(input) do
-    {data, num_rows, num_cols, graph} = common(input)
+    {data, _num_rows, _num_cols, graph} = common(input)
 
     for region <- :digraph_utils.components(graph) do
       area = length(region)
@@ -116,10 +114,14 @@ defmodule Day12 do
       Enum.each(region, fn {i, j} ->
         [v0, v1, v2, v3] =
           [
-            {i - 0.5, j - 0.5}, # up-left
-            {i + 0.5, j - 0.5}, # down-left
-            {i + 0.5, j + 0.5}, # down-right
-            {i - 0.5, j + 0.5}, # up-right
+            # up-left
+            {i - 0.5, j - 0.5},
+            # down-left
+            {i + 0.5, j - 0.5},
+            # down-right
+            {i + 0.5, j + 0.5},
+            # up-right
+            {i - 0.5, j + 0.5}
           ]
 
         :digraph.add_vertex(region_graph, v0, char)
