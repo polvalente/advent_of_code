@@ -1,9 +1,5 @@
 defmodule Zig.Day3 do
-  use Day, day: 3
-
-  use Zig,
-    otp_app: :advent_of_code_2024,
-    zig_code_path: "day03.zig"
+  use Zig.Day, day: 3
 
   @test_input """
   xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))

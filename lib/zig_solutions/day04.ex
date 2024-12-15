@@ -1,9 +1,5 @@
 defmodule Zig.Day4 do
-  use Day, day: 4
-
-  use Zig,
-    otp_app: :advent_of_code_2024,
-    zig_code_path: "day04.zig"
+  use Zig.Day, day: 4
 
   @test_input """
   MMMSXXMASM
