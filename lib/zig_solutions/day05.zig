@@ -2,7 +2,7 @@ const beam = @import("beam");
 const nif = @import("erl_nif");
 const std = @import("std");
 
-pub fn make_map(env: beam.env, _: c_int, _: [*]const beam.term) beam.term {
+pub fn make_map(env: beam.env, _: c_int, _: [*]const nif.ErlNifTerm) nif.ErlNifTerm {
     var gpa = beam.make_general_purpose_allocator_instance();
     const allocator = gpa.allocator();
     var map = std.AutoHashMap(i64, []i64).init(allocator);
@@ -20,12 +20,12 @@ pub fn make_map(env: beam.env, _: c_int, _: [*]const beam.term) beam.term {
     map.put(2, val2.items) catch unreachable;
 
     var term = nif.enif_make_new_map(env);
+    var out: nif.ErlNifTerm = undefined;
 
     var iter = map.iterator();
     while (iter.next()) |item| {
         const key: nif.ErlNifTerm = beam.make(item.key_ptr.*, .{}).v;
         const value: nif.ErlNifTerm = beam.make(item.value_ptr.*, .{ .as = .{ .list = .default } }).v;
-        var out: nif.ErlNifTerm = undefined;
         if (nif.enif_make_map_put(
             env,
             term,
@@ -33,10 +33,10 @@ pub fn make_map(env: beam.env, _: c_int, _: [*]const beam.term) beam.term {
             value,
             &out,
         ) == 0) {
-            return beam.raise_elixir_exception("RuntimeError", .{ .message = "Failed to make map put" }, .{});
+            return beam.raise_elixir_exception("RuntimeError", .{ .message = "Failed to make map put" }, .{}).v;
         }
         term = out;
     }
 
-    return beam.make(term, .{ .env = env });
+    return term;
 }

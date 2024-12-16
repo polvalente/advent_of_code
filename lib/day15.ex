@@ -90,9 +90,9 @@ defmodule Day15 do
           :move_failed ->
             {grid, pos}
         end
-        |> tap(fn {grid, pos} ->
+        |> tap(fn {grid, _pos} ->
           if debug? do
-            print_grid(grid, pos, num_rows, num_cols)
+            print_grid(grid, num_rows, num_cols)
           end
         end)
       end)
@@ -130,7 +130,7 @@ defmodule Day15 do
     end
   end
 
-  defp print_grid(grid, pos, num_rows, num_cols) do
+  defp print_grid(grid, num_rows, num_cols) do
     for i <- 0..(num_rows - 1) do
       for j <- 0..(num_cols - 1) do
         case Map.get(grid, {i, j}) do
@@ -219,26 +219,9 @@ defmodule Day15 do
     {grid, _} =
       Enum.reduce(moves, {grid, start}, fn move, {grid, pos} ->
         move_robot2(pos, move, grid)
-        |> tap(fn {grid, pos} ->
+        |> tap(fn {grid, _pos} ->
           if debug? do
-            move =
-              case move do
-                {0, -1} ->
-                  :left
-
-                {0, 1} ->
-                  :right
-
-                {-1, 0} ->
-                  :up
-
-                {1, 0} ->
-                  :down
-              end
-
-            dbg(move)
-
-            print_grid(grid, pos, num_rows, num_cols)
+            print_grid(grid, num_rows, num_cols)
           end
         end)
       end)
@@ -256,7 +239,6 @@ defmodule Day15 do
     positions = get_box_positions({i, j}, {inc_i, inc_j}, grid)
 
     Enum.all?(positions, fn {i, j} ->
-      c = Map.get(grid, {i, j})
       next_pos_i = i + inc_i
       next_pos_j = j + inc_j
 
@@ -310,7 +292,7 @@ defmodule Day15 do
     {grid, {i + inc_i, j + inc_j}}
   end
 
-  defp get_box_positions({i, j}, {inc_i, inc_j}, grid) do
+  defp get_box_positions({i, j}, {inc_i, _inc_j}, grid) do
     case Map.get(grid, {i, j}) do
       :box_left when inc_i != 0 -> [{i, j}, {i, j + 1}]
       :box_right when inc_i != 0 -> [{i, j}, {i, j - 1}]
