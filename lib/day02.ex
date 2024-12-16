@@ -75,9 +75,10 @@ defmodule Day2 do
         else
           l = Nx.to_list(t)
 
-          any_valid? = Enum.any?(0..(Nx.size(t) - 1), fn idx ->
-            solution(List.delete_at(l, idx) |> Nx.tensor()) == 1
-          end)
+          any_valid? =
+            Enum.any?(0..(Nx.size(t) - 1), fn idx ->
+              solution(List.delete_at(l, idx) |> Nx.tensor()) == 1
+            end)
 
           if any_valid? do
             acc + 1

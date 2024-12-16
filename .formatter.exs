@@ -3,6 +3,5 @@
     {mix,.formatter}.exs
     {config,lib,rel,test}/**/*.{ex,exs,zig}
     installer/**/*.{ex,exs}
-  ],
-  plugins: [Zig.Formatter]
+  ]
 ]

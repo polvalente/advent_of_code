@@ -14,10 +14,11 @@ defmodule Day3 do
 
     instructions = eventually(mul)
 
-    defparsec :text, repeat(instructions)
+    defparsec(:text, repeat(instructions))
 
     def run(text) do
       {:ok, instructions, _, _, _, _} = text(text)
+
       for {instruction, args} <- instructions do
         apply(instruction, args)
       end

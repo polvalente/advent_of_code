@@ -43,7 +43,11 @@ defmodule Day13 do
       prize_x = String.to_integer(x_str)
       prize_y = String.to_integer(y_str)
 
-      %{a: %{x: a_x_inc, y: a_y_inc}, b: %{x: b_x_inc, y: b_y_inc}, prize: %{x: prize_x, y: prize_y}}
+      %{
+        a: %{x: a_x_inc, y: a_y_inc},
+        b: %{x: b_x_inc, y: b_y_inc},
+        prize: %{x: prize_x, y: prize_y}
+      }
     end)
   end
 
@@ -65,23 +69,35 @@ defmodule Day13 do
   def part1(input) do
     # this is dumb and slow, but it works and is too funny to change
     button_cost = Nx.tensor([3, 1], backend: EXLA.Backend)
+
     for %{a: a, b: b, prize: prize} <- parse(input) do
-      a = Nx.tensor([
-        [a.x, b.x],
-        [a.y, b.y]
-      ], backend: EXLA.Backend)
+      a =
+        Nx.tensor(
+          [
+            [a.x, b.x],
+            [a.y, b.y]
+          ],
+          backend: EXLA.Backend
+        )
 
       prize = Nx.tensor([prize.x, prize.y], backend: EXLA.Backend)
 
+      {init_n, _} =
+        Nx.Random.uniform(Nx.Random.key(System.system_time()) |> Nx.backend_copy(EXLA.Backend),
+          shape: {2}
+        )
 
-      {init_n, _} = Nx.Random.uniform(Nx.Random.key(System.system_time()) |> Nx.backend_copy(EXLA.Backend), shape: {2})
       {init_fn, update_fn} = Polaris.Optimizers.adam(learning_rate: 0.1)
       init_optimizer_state = init_fn.(init_n)
 
       {_state, n, _loss} =
         0..100_000
-        |> Enum.reduce_while({init_optimizer_state, init_n, 0}, fn _, {optimizer_state, n, prev_loss} ->
-          {new_n, optimizer_state, loss} = Nx.Defn.jit_apply(&update/4, [{a, prize, button_cost}, optimizer_state, n, update_fn], compiler: EXLA)
+        |> Enum.reduce_while({init_optimizer_state, init_n, 0}, fn _,
+                                                                   {optimizer_state, n, prev_loss} ->
+          {new_n, optimizer_state, loss} =
+            Nx.Defn.jit_apply(&update/4, [{a, prize, button_cost}, optimizer_state, n, update_fn],
+              compiler: EXLA
+            )
 
           if Nx.to_number(Nx.abs(Nx.subtract(loss, prev_loss))) < 0.001 do
             {:halt, {optimizer_state, new_n, loss}}
@@ -92,7 +108,12 @@ defmodule Day13 do
 
       n_int = Nx.round(n) |> Nx.as_type(:s32)
 
-      abs_diff = Nx.dot(a, n_int) |> Nx.subtract(prize) |>  Nx.abs() |> Nx.all_close(Nx.tensor(0)) |> Nx.to_number()
+      abs_diff =
+        Nx.dot(a, n_int)
+        |> Nx.subtract(prize)
+        |> Nx.abs()
+        |> Nx.all_close(Nx.tensor(0))
+        |> Nx.to_number()
 
       if abs_diff == 1 do
         Nx.dot(n_int, button_cost) |> Nx.to_number()
@@ -125,36 +146,36 @@ defmodule Day13 do
   77204516023437
   """
   def part2(input) do
-    offset = 10000000000000
+    offset = 10_000_000_000_000
+
     for %{a: a, b: b, prize: prize} <- parse(input), reduce: 0 do
       cost ->
+        t =
+          Nx.u64([
+            [a.x, b.x],
+            [a.y, b.y]
+          ])
 
-      t =
-        Nx.u64([
-          [a.x, b.x],
-          [a.y, b.y]
-        ])
+        p = Nx.u64([[prize.x + offset], [prize.y + offset]])
 
-      p = Nx.u64([[prize.x + offset], [prize.y + offset]])
+        # nb via Cramer's rule
+        nb =
+          Nx.quotient(
+            integer_det(Nx.put_slice(t, [0, 1], p)),
+            integer_det(t)
+          )
+          |> Nx.to_number()
 
-      # nb via Cramer's rule
-      nb =
-        Nx.quotient(
-          integer_det(Nx.put_slice(t, [0, 1], p)),
-          integer_det(t)
-        )
-        |> Nx.to_number()
+        # na via substitution in the first equation
+        na = div(prize.x + offset - nb * b.x, a.x)
 
-      # na via substitution in the first equation
-      na = div(prize.x + offset - nb * b.x, a.x)
+        actual_p = Nx.dot(t, Nx.u64([[na], [nb]]))
 
-      actual_p = Nx.dot(t, Nx.u64([[na], [nb]]))
-
-      if  actual_p == p do
-        cost + 3 * na + nb
-      else
-        cost
-      end
+        if actual_p == p do
+          cost + 3 * na + nb
+        else
+          cost
+        end
     end
   end
 
