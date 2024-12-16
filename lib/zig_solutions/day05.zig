@@ -24,8 +24,8 @@ pub fn make_map(env: beam.env, _: c_int, _: [*]const nif.ErlNifTerm) nif.ErlNifT
 
     var iter = map.iterator();
     while (iter.next()) |item| {
-        const key: nif.ErlNifTerm = beam.make(item.key_ptr.*, .{}).v;
-        const value: nif.ErlNifTerm = beam.make(item.value_ptr.*, .{ .as = .{ .list = .default } }).v;
+        const key: nif.ErlNifTerm = beam.make(item.key_ptr.*, .{ .env = env }).v;
+        const value: nif.ErlNifTerm = beam.make(item.value_ptr.*, .{ .env = env, .as = .{ .list = .default } }).v;
         if (nif.enif_make_map_put(
             env,
             term,
@@ -33,7 +33,7 @@ pub fn make_map(env: beam.env, _: c_int, _: [*]const nif.ErlNifTerm) nif.ErlNifT
             value,
             &out,
         ) == 0) {
-            return beam.raise_elixir_exception("RuntimeError", .{ .message = "Failed to make map put" }, .{}).v;
+            return beam.raise_elixir_exception("RuntimeError", .{ .message = "Failed to make map put" }, .{ .env = env }).v;
         }
         term = out;
     }
