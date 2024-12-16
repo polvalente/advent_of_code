@@ -92,19 +92,6 @@ defmodule Day4 do
     search_rows(t, "XMAS") + search_cols(t, "XMAS") + search_diagonals(t, "XMAS")
   end
 
-  @test_input2 """
-  .M.S......
-  ..A..MSMS.
-  .M.S.MAA..
-  ..A.ASMSM.
-  .M.S.M....
-  ..........
-  S.S.S.S.S.
-  .A.A.A.A..
-  M.M.M.M.M.
-  ..........
-  """
-
   def match_3x3([
         [m, _, m],
         [_, "A", _],
