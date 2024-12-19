@@ -108,7 +108,7 @@ defmodule Day18 do
     {index, "#{x},#{y}"}
   end
 
-  defp binary_search(positions, max_valid_coord, low, high) when low + 1 >= high do
+  defp binary_search(_positions, _max_valid_coord, low, high) when low + 1 >= high do
     low
   end
 

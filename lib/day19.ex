@@ -58,15 +58,7 @@ defmodule Day19 do
   def part2(input) do
     {available_patterns, desired_designs} = parse(input)
 
-    regex =
-      available_patterns
-      |> Enum.map_join("|", &"(?:#{&1})")
-      |> then(&Regex.compile!("^(#{&1})+$"))
-
-    Enum.filter(desired_designs, fn design ->
-      Regex.match?(regex, design)
-    end)
-    |> Enum.reduce(0, fn design, acc ->
+    Enum.reduce(desired_designs, 0, fn design, acc ->
       acc + count_number_of_ways(design, available_patterns)
     end)
   end
