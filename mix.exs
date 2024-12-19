@@ -25,7 +25,8 @@ defmodule AdventOfCode2024.MixProject do
       {:nx, "~> 0.9"},
       {:zigler, "~> 0.13.3", runtime: false},
       {:exla, "~> 0.9"},
-      {:polaris, "~> 0.1"}
+      {:polaris, "~> 0.1"},
+      {:memoize, "~> 1.4.3"}
       # {:zigler, path: "/home/valente/coding/zigler"}
     ]
   end
