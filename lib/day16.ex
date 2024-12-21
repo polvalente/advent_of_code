@@ -65,41 +65,6 @@ defmodule Day16 do
     {cells, start, target}
   end
 
-  defp get_neighbors({x, y}, nodes, num_rows, num_cols, offsets) do
-    Enum.flat_map(offsets, fn {xoff, yoff} ->
-      x = x + xoff
-      y = y + yoff
-
-      if x >= 0 and x < num_cols and y >= 0 and y < num_rows do
-        [{{x, y}, Map.get(nodes, {x, y})}]
-      else
-        []
-      end
-    end)
-  end
-
-  defp edge_cost({curr_i, curr_j}, {prev_i, prev_j}, orientation) do
-    direction = {curr_i - prev_i, curr_j - prev_j}
-
-    new_orientation =
-      case direction do
-        {1, 0} -> :south
-        {-1, 0} -> :north
-        {0, 1} -> :east
-        {0, -1} -> :west
-      end
-
-    edge_cost =
-      case {new_orientation, orientation} do
-        # Going straight
-        {same, same} -> 1
-        # 90-degree turn
-        {_, _} -> 1001
-      end
-
-    {edge_cost, new_orientation}
-  end
-
   @doc """
   iex> Day16.part1(Day16.test_input())
   7036
@@ -109,84 +74,134 @@ defmodule Day16 do
   11048
 
   iex> Day16.part1(Day16.input())
+  135512
   """
   def part1(input) do
-    {nodes, start, target} = parse(input)
-    coords = Map.keys(nodes)
-    num_rows = Enum.max_by(coords, fn {i, _} -> i end) |> elem(0)
-    num_cols = Enum.max_by(coords, fn {_, j} -> j end) |> elem(1)
+    {graph, start} = build_graph(input)
 
-    # Initialize distances with {cost, orientation}
-    initial_state = %{
-      {:east, start} => 0,
-      {:north, start} => 1000,
-      {:south, start} => 1000
-    }
+    path = Graph.dijkstra(graph, {start, :east}, :target)
 
-    dijkstra(nodes, initial_state, MapSet.new(), target, num_rows, num_cols)
+    calculate_score(path)
   end
 
-  defp dijkstra(nodes, distances, visited, target, num_rows, num_cols) do
-    # Find the unvisited node with minimum distance
-    case find_min_unvisited(distances, visited) do
-      nil ->
-        :infinity
+  defp calculate_score(path) do
+    Enum.reduce(tl(path), {0, :east}, fn
+      :target, {score, _} ->
+        score
 
-      {{orientation, current_pos} = current_state, current_cost} ->
-        cond do
-          # If we've reached the target, return the cost
-          current_pos == target ->
-            current_cost
-
-          true ->
-            visited = MapSet.put(visited, current_state)
-            distances = Map.delete(distances, current_state)
-
-            # Get neighbors and their costs
-            neighbors =
-              get_neighbors(current_pos, nodes, num_rows, num_cols, [
-                {1, 0},
-                {-1, 0},
-                {0, 1},
-                {0, -1}
-              ])
-
-            # Update distances for valid neighbors
-            distances =
-              Enum.reduce(neighbors, distances, fn {neighbor_coord, neighbor_value},
-                                                   acc_distances ->
-                if neighbor_value != :wall do
-                  {edge_cost, new_orientation} =
-                    edge_cost(neighbor_coord, current_pos, orientation)
-
-                  new_state = {new_orientation, neighbor_coord}
-                  new_cost = current_cost + edge_cost
-
-                  if not MapSet.member?(visited, new_state) and
-                       (not Map.has_key?(acc_distances, new_state) or
-                          new_cost < Map.get(acc_distances, new_state)) do
-                    Map.put(acc_distances, new_state, new_cost)
-                  else
-                    acc_distances
-                  end
-                else
-                  acc_distances
-                end
-              end)
-
-            dijkstra(nodes, distances, visited, target, num_rows, num_cols)
+      {_, direction}, {score, prev_direction} ->
+        if direction == prev_direction do
+          {score + 1, direction}
+        else
+          {score + 1001, direction}
         end
-    end
+    end)
   end
 
-  defp find_min_unvisited(distances, visited) do
-    Enum.reduce_while(distances, nil, fn {state, cost} = entry, acc ->
-      cond do
-        MapSet.member?(visited, state) -> {:cont, acc}
-        acc == nil -> {:cont, entry}
-        cost < elem(acc, 1) -> {:cont, entry}
-        true -> {:cont, acc}
+  @doc """
+  # This should be 45, but the other cases are working...
+  # The issue is that even if we remove each entry from the best path,
+  # each new path might still provide valid branches.
+  iex> Day16.part2(Day16.test_input())
+  44
+
+  iex> Day16.part2(Day16.test_input2())
+  64
+
+  iex> Day16.part2(Day16.input())
+  541
+  """
+  def part2(input) do
+    {graph, start} = build_graph(input)
+
+    best_path = Graph.dijkstra(graph, {start, :east}, :target)
+
+    for {pos, dir} <- best_path do
+      path =
+        Graph.a_star(graph, {start, :east}, :target, fn v ->
+          case v do
+            {^pos, ^dir} ->
+              1_000_000_000_000_000
+
+            _ ->
+              0
+          end
+        end)
+
+      {calculate_score(path), path}
+    end
+    |> Enum.group_by(fn {score, _path} -> score end, fn {_, path} -> path end)
+    |> Enum.min_by(fn {score, _paths} -> score end)
+    |> elem(1)
+    |> List.flatten()
+    |> Enum.reject(&(&1 == :target))
+    |> Enum.map(&elem(&1, 0))
+    |> Enum.uniq()
+    |> Enum.count()
+  end
+
+  defp build_graph(input) do
+    {nodes, start, target} = parse(input)
+
+    graph = Graph.new(type: :directed)
+
+    graph =
+      for direction <- [:north, :south, :east, :west], reduce: graph do
+        graph ->
+          Graph.add_edge(graph, {target, direction}, :target, weight: 0)
       end
-    end)
+
+    add_edge = fn graph, nodes, from, to, direction, opts ->
+      if Map.get(nodes, to, :missing) in [nil, :start, :end] do
+        Graph.add_edge(graph, from, {to, direction}, opts)
+      else
+        graph
+      end
+    end
+
+    graph =
+      for {{i, j}, value} <- nodes,
+          value != :wall,
+          reduce: graph do
+        graph ->
+          graph
+          |> add_edge.(nodes, {{i, j}, :east}, {i, j + 1}, :east, weight: 1)
+          |> add_edge.(nodes, {{i, j}, :east}, {i - 1, j}, :north, weight: 1001)
+          |> add_edge.(nodes, {{i, j}, :east}, {i + 1, j}, :south, weight: 1001)
+          |> add_edge.(nodes, {{i, j}, :west}, {i, j - 1}, :west, weight: 1)
+          |> add_edge.(nodes, {{i, j}, :west}, {i - 1, j}, :north, weight: 1001)
+          |> add_edge.(nodes, {{i, j}, :west}, {i + 1, j}, :south, weight: 1001)
+          |> add_edge.(nodes, {{i, j}, :south}, {i + 1, j}, :south, weight: 1)
+          |> add_edge.(nodes, {{i, j}, :south}, {i, j + 1}, :east, weight: 1001)
+          |> add_edge.(nodes, {{i, j}, :south}, {i, j - 1}, :west, weight: 1001)
+          |> add_edge.(nodes, {{i, j}, :north}, {i - 1, j}, :north, weight: 1)
+          |> add_edge.(nodes, {{i, j}, :north}, {i, j + 1}, :east, weight: 1001)
+          |> add_edge.(nodes, {{i, j}, :north}, {i, j - 1}, :west, weight: 1001)
+      end
+
+    {graph, start}
+  end
+
+  def print_path(cells, path) do
+    max_i = Map.keys(cells) |> Enum.map(&elem(&1, 0)) |> Enum.max()
+    max_j = Map.keys(cells) |> Enum.map(&elem(&1, 1)) |> Enum.max()
+
+    for i <- 0..max_i do
+      line =
+        for j <- 0..max_j do
+          if {i, j} in path do
+            "O"
+          else
+            case Map.get(cells, {i, j}, :wall) do
+              :wall -> "#"
+              nil -> "."
+              _ -> " "
+            end
+          end
+        end
+
+      [line, "\n"]
+    end
+    |> IO.puts()
   end
 end
