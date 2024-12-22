@@ -1,7 +1,7 @@
 defmodule DoctestCase do
   use ExUnit.CaseTemplate
 
-  using do
+  using opts do
     [h | parts] = Module.split(__CALLER__.module) |> Enum.reverse()
 
     mod = [String.trim_trailing(h, "Test") | parts] |> Enum.reverse() |> Module.concat()
@@ -9,6 +9,7 @@ defmodule DoctestCase do
     quote do
       use ExUnit.Case, async: true
 
+      @moduletag unquote(opts[:moduletag])
       doctest unquote(mod)
     end
   end

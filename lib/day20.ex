@@ -40,7 +40,7 @@ defmodule Day20 do
             "E" ->
               [{:end, {i, j}}, {{i, j}, "E"}]
 
-            call ->
+            _ ->
               {{i, j}, cell}
           end
         end)

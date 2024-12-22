@@ -93,19 +93,19 @@ defmodule Day18 do
   end
 
   @doc """
-  iex> Day18.part2(Day18.test_input(), 6, 12)
-  {20, "{6,1}"}
+  iex> Day18.part2(Day18.test_input(), 6)
+  {20, {6,1}}
 
-  iex> Day18.part2(Day18.input(), 70, 1024)
-  {2851, "{45,18}"}
+  iex> Day18.part2(Day18.input(), 70)
+  {2851, {45,18}}
   """
   def part2(input, max_valid_coord) do
     positions = parse(input)
     num_bytes = length(positions)
     index = binary_search(positions, max_valid_coord, 0, num_bytes)
 
-    {x, y} = Enum.at(positions, index)
-    {index, "#{x},#{y}"}
+    tuple = Enum.at(positions, index)
+    {index, tuple}
   end
 
   defp binary_search(_positions, _max_valid_coord, low, high) when low + 1 >= high do
