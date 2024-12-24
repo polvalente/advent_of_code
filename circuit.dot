@@ -1,0 +1,685 @@
+strict digraph LogicCircuit {
+    layout=dot;
+    rankdir=LR;
+    node [shape=box, fontsize=10];
+    edge [fontsize=8];
+
+    // Input nodes
+    subgraph cluster_inputs {
+        label="Inputs";
+        node [style=filled, fillcolor=lightblue];
+        {rank=same; x00 x01 x02 x02 XOR y02 -> bgp
+ x03 x04 x05 x05 XOR y05 -> chs
+ x06 x06 XOR y06 -> bgq
+ x07 x07 XOR y07 -> gqg
+ x08 x08 XOR y08 -> knh
+ x09 x09 AND y09 -> bsm
+ x09 XOR y09 -> nbm
+ x10 x10 AND y10 -> ptj
+ x10 XOR y10 -> htc
+ x11 x11 XOR y11 -> hhm
+ x12 x12 AND y12 -> z12
+ x12 XOR y12 -> pps
+ x13 x13 XOR y13 -> tcq
+ x14 x14 XOR y14 -> bck
+ x15 x15 AND y15 -> gtf
+ x15 XOR y15 -> srk
+ x16 x16 AND y16 -> khn
+ x16 XOR y16 -> mft
+ x17 x18 x19 x19 AND y19 -> crv
+ x20 x20 AND y20 -> fct
+ x20 XOR y20 -> fht
+ x21 x21 AND y21 -> stq
+ x21 XOR y21 -> bbn
+ x22 x22 XOR y22 -> jkq
+ x23 x23 AND y23 -> mhq
+ x23 XOR y23 -> ncf
+ x24 x24 XOR y24 -> cns
+ x25 x25 XOR y25 -> khg
+ x26 x26 XOR y26 -> spf
+ x27 x27 AND y27 -> jns
+ x27 XOR y27 -> mcv
+ x28 x28 XOR y28 -> kjg
+ x29 x30 x30 XOR y30 -> ftw
+ x31 x31 AND y31 -> gnc
+ x31 XOR y31 -> kbv
+ x32 x32 XOR y32 -> cpt
+ x33 x33 AND y33 -> pvc
+ x33 XOR y33 -> jbr
+ x34 x34 XOR y34 -> ptk
+ x35 x35 AND y35 -> jdk
+ x36 x36 AND y36 -> jbq
+ x36 XOR y36 -> fcf
+ x37 x37 XOR y37 -> hbr
+ x38 x38 AND y38 -> dcc
+ x38 XOR y38 -> tvm
+ x39 x40 x40 AND y40 -> gdm
+ x41 x41 AND y41 -> qss
+ x41 XOR y41 -> dfs
+ x42 x42 AND y42 -> djs
+ x43 x44 x44 AND y44 -> bds
+ x44 XOR y44 -> vwd
+}
+        {rank=same; y00 y00 AND x00 -> spq
+ y00 XOR x00 -> z00
+ y01 y01 AND x01 -> khh
+ y01 XOR x01 -> gpk
+ y02 y02 AND x02 -> psw
+ y03 y03 AND x03 -> ssj
+ y03 XOR x03 -> fpk
+ y04 y04 AND x04 -> nfq
+ y04 XOR x04 -> pvj
+ y05 y05 AND x05 -> nph
+ y06 y06 AND x06 -> cnm
+ y07 y07 AND x07 -> jft
+ y08 y08 AND x08 -> cst
+ y09 y10 y11 y11 AND x11 -> rvg
+ y12 y13 y13 AND x13 -> ggg
+ y14 y14 AND x14 -> dwt
+ y15 y16 y17 y17 AND x17 -> nhh
+ y17 XOR x17 -> nqm
+ y18 y18 AND x18 -> sdp
+ y18 XOR x18 -> nhm
+ y19 y19 XOR x19 -> kfd
+ y20 y21 y22 y22 AND x22 -> nrq
+ y23 y24 y24 AND x24 -> tbn
+ y25 y25 AND x25 -> tvb
+ y26 y26 AND x26 -> csh
+ y27 y28 y28 AND x28 -> wgd
+ y29 y29 AND x29 -> tjt
+ y29 XOR x29 -> wft
+ y30 y30 AND x30 -> nmj
+ y31 y32 y32 AND x32 -> rjq
+ y33 y34 y34 AND x34 -> krb
+ y35 y35 XOR x35 -> dsb
+ y36 y37 y37 AND x37 -> kpb
+ y38 y39 y39 AND x39 -> cbf
+ y39 XOR x39 -> fgc
+ y40 y40 XOR x40 -> pgc
+ y41 y42 y42 XOR x42 -> vbq
+ y43 y43 AND x43 -> pkj
+ y43 XOR x43 -> hhg
+ y44}
+    }
+
+    // Gates and connections
+    bbn -> cdc
+ [label="AND"];
+    rsc -> cdc
+ [label="AND"];
+    bck -> z14
+ [label="XOR"];
+    csf -> z14
+ [label="XOR"];
+    bcr -> dfh
+ [label="OR"];
+    psw -> dfh
+ [label="OR"];
+    bgq -> dgh
+ [label="AND"];
+    wdh -> dgh
+ [label="AND"];
+    bgq -> z06
+ [label="XOR"];
+    wdh -> z06
+ [label="XOR"];
+    bsm -> fjn
+ [label="OR"];
+    vsc -> fjn
+ [label="OR"];
+    bvk -> nmw
+ [label="OR"];
+    khh -> nmw
+ [label="OR"];
+    bwv -> z42
+ [label="XOR"];
+    vbq -> z42
+ [label="XOR"];
+    cbf -> fvh
+ [label="OR"];
+    nfn -> fvh
+ [label="OR"];
+    cbk -> vsc
+ [label="AND"];
+    nbm -> vsc
+ [label="AND"];
+    ccd -> cbk
+ [label="OR"];
+    cst -> cbk
+ [label="OR"];
+    ccp -> z43
+ [label="XOR"];
+    hhg -> z43
+ [label="XOR"];
+    cdc -> z21
+ [label="OR"];
+    stq -> z21
+ [label="OR"];
+    chs -> jhv
+ [label="AND"];
+    rgv -> jhv
+ [label="AND"];
+    chs -> z05
+ [label="XOR"];
+    rgv -> z05
+ [label="XOR"];
+    cnm -> pmv
+ [label="OR"];
+    dgh -> pmv
+ [label="OR"];
+    cns -> z24
+ [label="XOR"];
+    rqd -> z24
+ [label="XOR"];
+    cpt -> z32
+ [label="XOR"];
+    fqc -> z32
+ [label="XOR"];
+    csf -> qsg
+ [label="AND"];
+    bck -> qsg
+ [label="AND"];
+    dbf -> pmr
+ [label="AND"];
+    dsb -> pmr
+ [label="AND"];
+    dbf -> z35
+ [label="XOR"];
+    dsb -> z35
+ [label="XOR"];
+    dbm -> qtg
+ [label="OR"];
+    jft -> qtg
+ [label="OR"];
+    ddw -> qfn
+ [label="AND"];
+    fht -> qfn
+ [label="AND"];
+    dfh -> z03
+ [label="XOR"];
+    fpk -> z03
+ [label="XOR"];
+    dfs -> z41
+ [label="XOR"];
+    fdv -> z41
+ [label="XOR"];
+    djs -> ccp
+ [label="OR"];
+    tgk -> ccp
+ [label="OR"];
+    dmb -> ddw
+ [label="OR"];
+    crv -> ddw
+ [label="OR"];
+    dvm -> z39
+ [label="XOR"];
+    fgc -> z39
+ [label="XOR"];
+    dwt -> sjm
+ [label="OR"];
+    qsg -> sjm
+ [label="OR"];
+    fbk -> hvg
+ [label="AND"];
+    tcq -> hvg
+ [label="AND"];
+    fbk -> z13
+ [label="XOR"];
+    tcq -> z13
+ [label="XOR"];
+    fcf -> vmj
+ [label="AND"];
+    spk -> vmj
+ [label="AND"];
+    fcf -> z36
+ [label="XOR"];
+    spk -> z36
+ [label="XOR"];
+    fdv -> wtt
+ [label="AND"];
+    dfs -> wtt
+ [label="AND"];
+    fgc -> nfn
+ [label="AND"];
+    dvm -> nfn
+ [label="AND"];
+    fht -> z20
+ [label="XOR"];
+    ddw -> z20
+ [label="XOR"];
+    fjn -> dtg
+ [label="AND"];
+    htc -> dtg
+ [label="AND"];
+    fjn -> z10
+ [label="XOR"];
+    htc -> z10
+ [label="XOR"];
+    fmf -> z17
+ [label="XOR"];
+    nqm -> z17
+ [label="XOR"];
+    fpk -> ccr
+ [label="AND"];
+    dfh -> ccr
+ [label="AND"];
+    fqc -> nfh
+ [label="AND"];
+    cpt -> nfh
+ [label="AND"];
+    ftw -> z30
+ [label="XOR"];
+    gsj -> z30
+ [label="XOR"];
+    fvh -> hdq
+ [label="AND"];
+    pgc -> hdq
+ [label="AND"];
+    fvh -> z40
+ [label="XOR"];
+    pgc -> z40
+ [label="XOR"];
+    fwg -> rrj
+ [label="OR"];
+    gtf -> rrj
+ [label="OR"];
+    ggg -> csf
+ [label="OR"];
+    hvg -> csf
+ [label="OR"];
+    gpk -> bvk
+ [label="AND"];
+    spq -> bvk
+ [label="AND"];
+    gqb -> mbp
+ [label="OR"];
+    csh -> mbp
+ [label="OR"];
+    gqg -> z07
+ [label="XOR"];
+    pmv -> z07
+ [label="XOR"];
+    gsj -> pwp
+ [label="AND"];
+    ftw -> pwp
+ [label="AND"];
+    hbr -> mjr
+ [label="AND"];
+    qfp -> mjr
+ [label="AND"];
+    hbr -> z37
+ [label="XOR"];
+    qfp -> z37
+ [label="XOR"];
+    hdq -> fdv
+ [label="OR"];
+    gdm -> fdv
+ [label="OR"];
+    hhg -> msp
+ [label="AND"];
+    ccp -> msp
+ [label="AND"];
+    jbq -> qfp
+ [label="OR"];
+    vmj -> qfp
+ [label="OR"];
+    jbr -> z33
+ [label="AND"];
+    wcs -> z33
+ [label="AND"];
+    jbv -> vjg
+ [label="AND"];
+    kjg -> vjg
+ [label="AND"];
+    jbv -> z28
+ [label="XOR"];
+    kjg -> z28
+ [label="XOR"];
+    jdk -> spk
+ [label="OR"];
+    pmr -> spk
+ [label="OR"];
+    jhv -> wdh
+ [label="OR"];
+    nph -> wdh
+ [label="OR"];
+    jkq -> vkg
+ [label="AND"];
+    nhn -> vkg
+ [label="AND"];
+    jkq -> z22
+ [label="XOR"];
+    nhn -> z22
+ [label="XOR"];
+    jmr -> ptd
+ [label="AND"];
+    nhm -> ptd
+ [label="AND"];
+    jns -> jbv
+ [label="OR"];
+    npn -> jbv
+ [label="OR"];
+    kbv -> qhg
+ [label="AND"];
+    ctw -> qhg
+ [label="AND"];
+    kbv -> z31
+ [label="XOR"];
+    ctw -> z31
+ [label="XOR"];
+    kfd -> z19
+ [label="XOR"];
+    rtg -> z19
+ [label="XOR"];
+    kmm -> vnr
+ [label="AND"];
+    ptk -> vnr
+ [label="AND"];
+    knh -> z08
+ [label="XOR"];
+    qtg -> z08
+ [label="XOR"];
+    kvv -> z44
+ [label="XOR"];
+    vwd -> z44
+ [label="XOR"];
+    mcv -> npn
+ [label="AND"];
+    mbp -> npn
+ [label="AND"];
+    mcv -> z27
+ [label="XOR"];
+    mbp -> z27
+ [label="XOR"];
+    mfp -> gqb
+ [label="AND"];
+    spf -> gqb
+ [label="AND"];
+    mfp -> z26
+ [label="XOR"];
+    spf -> z26
+ [label="XOR"];
+    mgw -> z45
+ [label="OR"];
+    bds -> z45
+ [label="OR"];
+    mjr -> pkw
+ [label="OR"];
+    kpb -> pkw
+ [label="OR"];
+    mmw -> rkf
+ [label="AND"];
+    ncf -> rkf
+ [label="AND"];
+    mmw -> z23
+ [label="XOR"];
+    ncf -> z23
+ [label="XOR"];
+    nbm -> z09
+ [label="XOR"];
+    cbk -> z09
+ [label="XOR"];
+    ndp -> rgv
+ [label="OR"];
+    nfq -> rgv
+ [label="OR"];
+    nhh -> jmr
+ [label="OR"];
+    tgq -> jmr
+ [label="OR"];
+    nhm -> z18
+ [label="XOR"];
+    jmr -> z18
+ [label="XOR"];
+    nmw -> bcr
+ [label="AND"];
+    bgp -> bcr
+ [label="AND"];
+    nmw -> z02
+ [label="XOR"];
+    bgp -> z02
+ [label="XOR"];
+    nqm -> tgq
+ [label="AND"];
+    fmf -> tgq
+ [label="AND"];
+    nrq -> mmw
+ [label="OR"];
+    vkg -> mmw
+ [label="OR"];
+    pkj -> kvv
+ [label="OR"];
+    msp -> kvv
+ [label="OR"];
+    pmv -> dbm
+ [label="AND"];
+    gqg -> dbm
+ [label="AND"];
+    pps -> vdc
+ [label="XOR"];
+    wdg -> vdc
+ [label="XOR"];
+    ptj -> spg
+ [label="OR"];
+    dtg -> spg
+ [label="OR"];
+    ptk -> z34
+ [label="XOR"];
+    kmm -> z34
+ [label="XOR"];
+    pvc -> kmm
+ [label="OR"];
+    gst -> kmm
+ [label="OR"];
+    pvj -> z04
+ [label="XOR"];
+    qfk -> z04
+ [label="XOR"];
+    pwp -> ctw
+ [label="OR"];
+    nmj -> ctw
+ [label="OR"];
+    qfk -> ndp
+ [label="AND"];
+    pvj -> ndp
+ [label="AND"];
+    qfn -> rsc
+ [label="OR"];
+    fct -> rsc
+ [label="OR"];
+    qhg -> fqc
+ [label="OR"];
+    gnc -> fqc
+ [label="OR"];
+    qss -> bwv
+ [label="OR"];
+    wtt -> bwv
+ [label="OR"];
+    qtg -> ccd
+ [label="AND"];
+    knh -> ccd
+ [label="AND"];
+    rcb -> mfp
+ [label="OR"];
+    khg -> mfp
+ [label="OR"];
+    rjq -> wcs
+ [label="OR"];
+    nfh -> wcs
+ [label="OR"];
+    rkf -> rqd
+ [label="OR"];
+    mhq -> rqd
+ [label="OR"];
+    rqd -> grb
+ [label="AND"];
+    cns -> grb
+ [label="AND"];
+    rrj -> tnt
+ [label="AND"];
+    mft -> tnt
+ [label="AND"];
+    rrj -> z16
+ [label="XOR"];
+    mft -> z16
+ [label="XOR"];
+    rsc -> nhn
+ [label="XOR"];
+    bbn -> nhn
+ [label="XOR"];
+    rtg -> dmb
+ [label="AND"];
+    kfd -> dmb
+ [label="AND"];
+    rvg -> wdg
+ [label="OR"];
+    wvv -> wdg
+ [label="OR"];
+    sdp -> rtg
+ [label="OR"];
+    ptd -> rtg
+ [label="OR"];
+    spg -> wvv
+ [label="AND"];
+    hhm -> wvv
+ [label="AND"];
+    spg -> z11
+ [label="XOR"];
+    hhm -> z11
+ [label="XOR"];
+    spq -> z01
+ [label="XOR"];
+    gpk -> z01
+ [label="XOR"];
+    srk -> fwg
+ [label="AND"];
+    sjm -> fwg
+ [label="AND"];
+    srk -> z15
+ [label="XOR"];
+    sjm -> z15
+ [label="XOR"];
+    ssj -> qfk
+ [label="OR"];
+    ccr -> qfk
+ [label="OR"];
+    stm -> gsj
+ [label="OR"];
+    tjt -> gsj
+ [label="OR"];
+    tbn -> jhd
+ [label="OR"];
+    grb -> jhd
+ [label="OR"];
+    tnt -> fmf
+ [label="OR"];
+    khn -> fmf
+ [label="OR"];
+    tvb -> rcb
+ [label="AND"];
+    jhd -> rcb
+ [label="AND"];
+    tvb -> z25
+ [label="XOR"];
+    jhd -> z25
+ [label="XOR"];
+    tvc -> dvm
+ [label="OR"];
+    dcc -> dvm
+ [label="OR"];
+    tvm -> tvc
+ [label="AND"];
+    pkw -> tvc
+ [label="AND"];
+    tvm -> z38
+ [label="XOR"];
+    pkw -> z38
+ [label="XOR"];
+    vbq -> tgk
+ [label="AND"];
+    bwv -> tgk
+ [label="AND"];
+    vdc -> fbk
+ [label="OR"];
+    kcp -> fbk
+ [label="OR"];
+    vnr -> dbf
+ [label="OR"];
+    krb -> dbf
+ [label="OR"];
+    vwd -> mgw
+ [label="AND"];
+    kvv -> mgw
+ [label="AND"];
+    wcs -> gst
+ [label="XOR"];
+    jbr -> gst
+ [label="XOR"];
+    wdg -> kcp
+ [label="AND"];
+    pps -> kcp
+ [label="AND"];
+    wft -> stm
+ [label="AND"];
+    nnq -> stm
+ [label="AND"];
+    wft -> z29
+ [label="XOR"];
+    nnq -> z29
+ [label="XOR"];
+    wgd -> nnq
+ [label="OR"];
+    vjg -> nnq
+ [label="OR"];
+
+    // Output nodes
+    subgraph cluster_outputs {
+        label="Outputs";
+        node [style=filled, fillcolor=lightgreen];
+        {rank=same; z01
+ z02
+ z03
+ z04
+ z05
+ z06
+ z07
+ z08
+ z09
+ z10
+ z11
+ z13
+ z14
+ z15
+ z16
+ z17
+ z18
+ z19
+ z20
+ z21
+ z22
+ z23
+ z24
+ z25
+ z26
+ z27
+ z28
+ z29
+ z30
+ z31
+ z32
+ z33
+ z34
+ z35
+ z36
+ z37
+ z38
+ z39
+ z40
+ z41
+ z42
+ z43
+ z44
+ z45
+};
+    }
+}
