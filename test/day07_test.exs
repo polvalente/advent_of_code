@@ -1,3 +1,3 @@
-defmodule Day7Test do
+defmodule AOC2024.Day7Test do
   use DoctestCase
 end

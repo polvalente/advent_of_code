@@ -1,3 +1,3 @@
-defmodule Zig.Day6Test do
+defmodule AOC2024.Zig.Day6Test do
   use DoctestCase
 end

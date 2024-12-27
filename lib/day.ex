@@ -4,6 +4,7 @@ defmodule Day do
 
     quote do
       import Day
+      use Memoize
 
       Module.register_attribute(__MODULE__, :test_input, accumulate: true, persist: true)
 
@@ -12,7 +13,7 @@ defmodule Day do
       end
 
       def input do
-        File.read!("#{:code.priv_dir(:advent_of_code_2024)}/input#{unquote(day)}.txt")
+        File.read!("#{:code.priv_dir(:advent_of_code)}/input#{unquote(day)}.txt")
       end
     end
   end
