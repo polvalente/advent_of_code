@@ -27,3 +27,5 @@ advent_of_code_2024-*.tar
 
 /priv/lib
 /lib/**/.Elixir*.zig
+
+/priv/2025/

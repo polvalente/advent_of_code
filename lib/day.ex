@@ -12,8 +12,8 @@ defmodule Day do
         __MODULE__.__info__(:attributes)[:test_input] |> List.first()
       end
 
-      def input do
-        File.read!("#{:code.priv_dir(:advent_of_code)}/input#{unquote(day)}.txt")
+      def input(subdir \\ "") do
+        File.read!("#{:code.priv_dir(:advent_of_code)}/#{subdir}/input#{unquote(day)}.txt")
       end
     end
   end

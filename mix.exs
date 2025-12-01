@@ -22,9 +22,9 @@ defmodule AOC2024.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:nx, "~> 0.9"},
+      {:nx, "~> 0.10"},
       {:zigler, "~> 0.13.3", runtime: false},
-      {:exla, "~> 0.9"},
+      {:exla, "~> 0.10"},
       {:polaris, "~> 0.1"},
       {:memoize, "~> 1.4.3"},
       {:libgraph, "~> 0.16.0"}
